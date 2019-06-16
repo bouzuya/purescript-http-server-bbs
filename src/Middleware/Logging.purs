@@ -13,7 +13,13 @@ import Type (Middleware)
 
 middleware :: forall r. Middleware r r
 middleware next context@{ request: { method, pathname } } = do
-  dt <- Class.liftEffect (map DateTimeFormatter.toString Now.nowDateTime)
-  Console.log (String.joinWith " " [dt, show method, pathname])
+  dt <- Class.liftEffect Now.nowDateTime
+  Console.log
+    (String.joinWith
+      " "
+      [ DateTimeFormatter.toString dt <> "Z"
+      , show method
+      , pathname
+      ])
   response <- next context
   pure response
